@@ -1,9 +1,15 @@
 import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import EmployeList from './components/Employes/EmployeList';
+import EmployeeContainer from './components/Employes/EmployeeContainer';
 
 function App() {
   return (
     <div className="App">
-      <h1>Crud App</h1>
+      <Routes>
+        <Route exact path='/' element={<EmployeList/>}/>
+        <Route exact path='/addemployee' element={<EmployeeContainer/>} />
+      </Routes>
     </div>
   );
 }
