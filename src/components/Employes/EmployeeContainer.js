@@ -10,13 +10,13 @@ const EmployeeContainer = () => {
             console.log(e.target.value)
         let value = e.target.value;
         let name = e.target.name;
-        if ( name == "employeeName"){
+        if ( name === "employeeName"){
             setName(value);
         }
-        if ( name == "employeeId"){
+        if ( name === "employeeId"){
             setId(value);
         }
-        if ( name == "employeeAddress"){
+        if ( name === "employeeAddress"){
             setAddress(value);
         }
     }
