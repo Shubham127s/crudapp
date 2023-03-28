@@ -19,7 +19,7 @@ const EmployeeContainer = (props) => {
         if(id){
             viewEmployee(id)
         }
-    }, [viewEmployee])
+    }, [viewEmployee, id])
 
     console.log("viewSingleData", viewSingleData)
 
