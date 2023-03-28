@@ -1,25 +1,48 @@
 import React from 'react'
-import { Table  } from 'semantic-ui-react'
+import { useEffect } from 'react'
+import { Table,Button  } from 'semantic-ui-react'
 import HeaderPortion from '../Header/Header'
+import { getEmployee } from '../redux/Action/EmployeeAction'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 
-const EmployeList = () => {
+const EmployeList = (props) => {
+
+    const {getEmployee, employeeList} = props
+
+    useEffect(() => {
+        getEmployee();
+    }, [getEmployee])
+    console.log("employeeReduceremployeeReducer", employeeList)
 
     const getTableBody = () =>{
         return(
             <>
-            <Table.Row className="form-data">
-                <Table.Cell>1</Table.Cell>
-                <Table.Cell>Shubham Joshi</Table.Cell>
-                <Table.Cell>101</Table.Cell>
-                <Table.Cell>Ramnagar</Table.Cell>
-            </Table.Row>
-            <Table.Row>
-                <Table.Cell>2</Table.Cell>
-                <Table.Cell>Sumit Suyal</Table.Cell>
-                <Table.Cell>102</Table.Cell>
-                <Table.Cell>Bhimtal</Table.Cell>
-            </Table.Row>
+            {employeeList.map((item, index) => {
+                return(
+                    <Table.Row  className="form-data">
+                        <Table.Cell>{index + 1}</Table.Cell>
+                        <Table.Cell>{item.name}</Table.Cell>
+                        <Table.Cell>{item.employeeId}</Table.Cell>
+                        <Table.Cell>{item.address}</Table.Cell>
+                        <Table.Cell>
+                        <Link to={{ 
+                                    pathname: `/addemployee/${item.id}`
+                                }}>
+                            <Button icon className="edit-btn">
+                                Edit
+                            </Button>
+                            </Link> <span/>
+                            <Button icon
+                                // onClick={() => deleteCategory(data.id)} 
+                                className="delete-btn">
+                                Delete
+                            </Button>
+                        </Table.Cell>
+                    </Table.Row>
+                )
+            })}
             </>
         )
     }
@@ -55,6 +78,14 @@ const EmployeList = () => {
   )
 }
 
+const mapStateToProps = (state) =>({
+    employeeList: state.employeeReducer.employeeList
+})
 
+const mapDispatchToProps = {
+    getEmployee
+}
 
-export default EmployeList
+export default connect(mapStateToProps, mapDispatchToProps)(EmployeList)
+
+// export default EmployeList

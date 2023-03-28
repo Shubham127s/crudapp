@@ -9,6 +9,8 @@ function App() {
       <Routes>
         <Route exact path='/' element={<EmployeList/>}/>
         <Route exact path='/addemployee' element={<EmployeeContainer/>} />
+        <Route exact path='/addemployee/:id' element={<EmployeeContainer/>} />
+
       </Routes>
     </div>
   );

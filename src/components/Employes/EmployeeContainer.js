@@ -1,10 +1,16 @@
 import React, { useState } from 'react'
+import { connect } from 'react-redux'
 import HeaderPortion from '../Header/Header'
+import { addEmployee } from '../redux/Action/EmployeeAction'
+import { useNavigate } from 'react-router-dom'
 
-const EmployeeContainer = () => {
+const EmployeeContainer = (props) => {
     const [name, setName] = useState()
     const [id, setId] = useState()
     const [address, setAddress] = useState()
+    const {addEmployee} = props
+
+    const navigate = useNavigate()
 
     const handleChange = (e) => {
             console.log(e.target.value)
@@ -24,10 +30,12 @@ const EmployeeContainer = () => {
     const handleSubmit =() => {
         let obj = {
             name: name,
-            id: id,
+            employeeId: id,
             address: address
         }
         console.log(obj)
+        addEmployee(obj)
+        navigate('/')
     }
   return (
     <>
@@ -47,4 +55,14 @@ const EmployeeContainer = () => {
   )
 }
 
-export default EmployeeContainer
+// export default EmployeeContainer
+
+const mapStateToProps = (state) =>({
+
+})
+
+const mapDispatchToProps = {
+    addEmployee
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EmployeeContainer)
