@@ -2,26 +2,32 @@ import React from 'react'
 import { useEffect } from 'react'
 import { Table,Button  } from 'semantic-ui-react'
 import HeaderPortion from '../Header/Header'
-import { getEmployee } from '../redux/Action/EmployeeAction'
+import { getEmployee, deleteEmployee } from '../redux/Action/EmployeeAction'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 
 const EmployeList = (props) => {
 
-    const {getEmployee, employeeList} = props
+    const {getEmployee, employeeList,deleteEmployee} = props
 
     useEffect(() => {
         getEmployee();
     }, [getEmployee])
     console.log("employeeReduceremployeeReducer", employeeList)
 
+    const deleteCategory = (id) => {
+        console.log(id);
+        // dispatch(deleteData(id));
+        deleteEmployee(id);
+      };
+
     const getTableBody = () =>{
         return(
             <>
             {employeeList.map((item, index) => {
                 return(
-                    <Table.Row  className="form-data">
+                    <Table.Row  className="ui celled table">
                         <Table.Cell>{index + 1}</Table.Cell>
                         <Table.Cell>{item.name}</Table.Cell>
                         <Table.Cell>{item.employeeId}</Table.Cell>
@@ -35,7 +41,7 @@ const EmployeList = (props) => {
                             </Button>
                             </Link> <span/>
                             <Button icon
-                                // onClick={() => deleteCategory(data.id)} 
+                                onClick={() => deleteCategory(item.id)} 
                                 className="delete-btn">
                                 Delete
                             </Button>
@@ -83,7 +89,8 @@ const mapStateToProps = (state) =>({
 })
 
 const mapDispatchToProps = {
-    getEmployee
+    getEmployee,
+    deleteEmployee,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmployeList)
