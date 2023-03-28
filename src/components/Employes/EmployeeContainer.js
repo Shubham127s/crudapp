@@ -1,16 +1,27 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import HeaderPortion from '../Header/Header'
-import { addEmployee } from '../redux/Action/EmployeeAction'
-import { useNavigate } from 'react-router-dom'
+import { addEmployee, viewEmployee,updateEmployee } from '../redux/Action/EmployeeAction'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect } from 'react'
 
 const EmployeeContainer = (props) => {
-    const [name, setName] = useState()
-    const [id, setId] = useState()
+    const [name, setName] = useState();
+    const [employeeId, setEmployeeId] = useState()
     const [address, setAddress] = useState()
-    const {addEmployee} = props
+    const {addEmployee, viewEmployee, viewSingleData, updateEmployee} = props
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    let {id} = useParams();
+    console.log(id)
+
+    useEffect(() => {
+        if(id){
+            viewEmployee(id)
+        }
+    }, [viewEmployee])
+
+    console.log("viewSingleData", viewSingleData)
 
     const handleChange = (e) => {
             console.log(e.target.value)
@@ -20,7 +31,7 @@ const EmployeeContainer = (props) => {
             setName(value);
         }
         if ( name === "employeeId"){
-            setId(value);
+            setEmployeeId(value);
         }
         if ( name === "employeeAddress"){
             setAddress(value);
@@ -30,11 +41,16 @@ const EmployeeContainer = (props) => {
     const handleSubmit =() => {
         let obj = {
             name: name,
-            employeeId: id,
+            employeeId: employeeId,
             address: address
         }
         console.log(obj)
-        addEmployee(obj)
+        if (id) {
+            updateEmployee(id, obj);
+          } else {
+            addEmployee(obj)
+          }
+        
         navigate('/')
     }
   return (
@@ -43,12 +59,16 @@ const EmployeeContainer = (props) => {
         <div className='container'>
             <form>
                 <label>Employee Name</label>
-                <input type="text" onChange={handleChange} value={name} name="employeeName"/><br/><br/>
+                <input type="text" onChange={handleChange} value={name ? name : viewSingleData.name} name="employeeName"/><br/><br/>
                 <label>Employee Id</label>
-                <input type="text" onChange={handleChange} value={id} name="employeeId"  /> <br/><br/>
+                <input type="text" onChange={handleChange} value={employeeId ? employeeId : viewSingleData.employeeId } name="employeeId"  /> <br/><br/>
                 <label>Employee Address</label>
-                <input type="text" onChange={handleChange} value={address} name="employeeAddress"  /><br/><br/>
-                <input type='button' value="submit" onClick={handleSubmit}/>
+                <input type="text" onChange={handleChange} value={address ? address : viewSingleData.address} name="employeeAddress"  /><br/><br/>
+                {id ? (
+                    <input type="submit" value="Update" onClick={handleSubmit} />
+                    ) : (
+                    <input type="submit" value="Submit" onClick={handleSubmit} />
+                )}
             </form>
         </div>
     </>
@@ -58,11 +78,14 @@ const EmployeeContainer = (props) => {
 // export default EmployeeContainer
 
 const mapStateToProps = (state) =>({
+    viewSingleData: state.employeeReducer.viewSingleData
 
 })
 
 const mapDispatchToProps = {
-    addEmployee
+    addEmployee,
+    viewEmployee,
+    updateEmployee
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmployeeContainer)
