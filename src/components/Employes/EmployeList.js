@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect } from 'react'
-import { Table,Button, Icon  } from 'semantic-ui-react'
+import { Table,Button  } from 'semantic-ui-react'
 import HeaderPortion from '../Header/Header'
 import { getEmployee } from '../redux/Action/EmployeeAction'
 import { connect } from 'react-redux'
