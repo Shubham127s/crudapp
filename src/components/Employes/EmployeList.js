@@ -1,15 +1,24 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { useEffect } from 'react'
 import { Table,Button  } from 'semantic-ui-react'
 import HeaderPortion from '../Header/Header'
 import { getEmployee, deleteEmployee } from '../redux/Action/EmployeeAction'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Pagination from '../Pagination'
 
 
 const EmployeList = (props) => {
-
+    const [currentPage, setCurrentPage] = useState(1);
+    const [recordsPerPage] = useState(4);
     const {getEmployee, employeeList,deleteEmployee} = props
+
+    const indexOfLastRecord = currentPage * recordsPerPage;
+    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+    const currentRecords = employeeList.slice(indexOfFirstRecord, 
+        indexOfLastRecord);
+
+        const nPages = Math.ceil(employeeList.length / recordsPerPage)
 
     useEffect(() => {
         getEmployee();
@@ -17,15 +26,13 @@ const EmployeList = (props) => {
     console.log("employeeReduceremployeeReducer", employeeList)
 
     const deleteCategory = (id) => {
-        console.log(id);
-        // dispatch(deleteData(id));
         deleteEmployee(id);
       };
 
     const getTableBody = () =>{
         return(
             <>
-            {employeeList.map((item, index) => {
+            {currentRecords.map((item, index) => {
                 return(
                     <Table.Row  className="ui celled table">
                         <Table.Cell>{index + 1}</Table.Cell>
@@ -69,6 +76,11 @@ const EmployeList = (props) => {
                         {getTableBody()}
                     </Table.Body>
                 </Table>
+                <Pagination
+                    nPages = { nPages }
+                    currentPage = { currentPage } 
+                    setCurrentPage = { setCurrentPage }
+                />
             </div>
 
         )

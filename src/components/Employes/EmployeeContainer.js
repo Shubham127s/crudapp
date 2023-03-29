@@ -6,10 +6,11 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 
 const EmployeeContainer = (props) => {
+    const {addEmployee, viewEmployee, viewSingleData, updateEmployee} = props
     const [name, setName] = useState();
     const [employeeId, setEmployeeId] = useState()
     const [address, setAddress] = useState()
-    const {addEmployee, viewEmployee, viewSingleData, updateEmployee} = props
+ 
 
     const navigate = useNavigate();
     let {id} = useParams();
@@ -27,15 +28,22 @@ const EmployeeContainer = (props) => {
             console.log(e.target.value)
         let value = e.target.value;
         let name = e.target.name;
-        if ( name === "employeeName"){
-            setName(value);
+        if(id){
+            setName(viewSingleData.name)
+            setAddress(viewSingleData.address)
+            setEmployeeId(viewSingleData.employeeId)
+        }else{
+            if ( name === "employeeName"){
+                setName(value);
+            }
+            if ( name === "employeeId"){
+                setEmployeeId(value);
+            }
+            if ( name === "employeeAddress"){
+                setAddress(value);
+            }
         }
-        if ( name === "employeeId"){
-            setEmployeeId(value);
-        }
-        if ( name === "employeeAddress"){
-            setAddress(value);
-        }
+        
     }
 
     const handleSubmit =() => {
